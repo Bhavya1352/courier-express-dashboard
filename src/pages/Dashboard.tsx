@@ -1,132 +1,139 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Package, Truck, Clock, MapPin, TrendingUp, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Package, User, Shield, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useDirection } from "@/contexts/DirectionContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const stats = [
-  { icon: Package, label: "Total Shipments", value: "12,847", change: "+12%" },
-  { icon: Truck, label: "Active Fleet", value: "1,247", change: "+5%" },
-  { icon: Clock, label: "Avg. Delivery", value: "2.4 hrs", change: "-18%" },
-  { icon: MapPin, label: "Cities Covered", value: "534", change: "+8%" },
-];
+const Dashboard = () => {
+  const { isRTL } = useDirection();
 
-const recentDeliveries = [
-  { id: "SF-29481", dest: "Mumbai, MH", status: "Delivered", time: "12 min ago" },
-  { id: "SF-29482", dest: "Delhi, DL", status: "In Transit", time: "24 min ago" },
-  { id: "SF-29483", dest: "Bangalore, KA", status: "Delivered", time: "38 min ago" },
-  { id: "SF-29484", dest: "Chennai, TN", status: "Out for Delivery", time: "45 min ago" },
-  { id: "SF-29485", dest: "Pune, MH", status: "Delivered", time: "1 hr ago" },
-];
-
-const Dashboard = () => (
+  return (
   <div className="min-h-screen bg-background">
     <Navbar />
-    <section className="pt-32 pb-24">
-      <div className="container">
+    <section dir="ltr" className="pt-32 pb-24">
+      <div className="container max-w-4xl text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="text-primary text-sm font-medium tracking-wider uppercase mb-3">Dashboard</p>
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-8">
-            Fleet <span className="text-gradient">Overview</span>
+          <Package className="w-16 h-16 text-primary mx-auto mb-6" />
+          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
+            {isRTL ? (
+              <>
+                ,Choose Your <span className="text-gradient">Dashboard.</span>
+              </>
+            ) : (
+              <>
+                Choose Your <span className="text-gradient">Dashboard</span>
+              </>
+            )}
           </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+            Access your personalized dashboard based on your role and requirements.
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="glass rounded-2xl p-6"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <s.icon className="w-8 h-8 text-primary" />
-                <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                  s.change.startsWith("+") ? "bg-primary/10 text-primary" : "bg-green-500/10 text-green-400"
-                }`}>
-                  {s.change}
-                </span>
-              </div>
-              <p className="text-3xl font-display font-bold text-foreground">{s.value}</p>
-              <p className="text-sm text-muted-foreground mt-1">{s.label}</p>
-            </motion.div>
-          ))}
-        </div>
+        <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+          {/* User Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass rounded-2xl p-8 text-center hover:glow-border transition-all duration-300"
+          >
+            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-6">
+              <User className="w-8 h-8 text-blue-400" />
+            </div>
+            <h2 className="text-2xl font-display font-bold text-foreground mb-4">User Dashboard</h2>
+            <p className="text-muted-foreground mb-6">
+              Track your shipments, manage orders, view delivery history, and handle payments.
+            </p>
+            <ul className="text-sm text-muted-foreground mb-8 space-y-2">
+              <li>• Track active shipments</li>
+              <li>• View delivery history</li>
+              <li>• Manage account balance</li>
+              <li>• Download invoices</li>
+            </ul>
+            <Button variant="hero" size="lg" className="w-full" asChild>
+              <Link to="/user-dashboard">
+                Access User Dashboard
+              </Link>
+            </Button>
+          </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Recent deliveries */}
+          {/* Admin Dashboard */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="lg:col-span-2 glass rounded-2xl p-6"
+            className="glass rounded-2xl p-8 text-center hover:glow-border transition-all duration-300"
           >
-            <h2 className="font-display font-semibold text-foreground mb-4">Recent Deliveries</h2>
-            <div className="space-y-3">
-              {recentDeliveries.map((d) => (
-                <div key={d.id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-                  <div className="flex items-center gap-3">
-                    <Package className="w-4 h-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{d.id}</p>
-                      <p className="text-xs text-muted-foreground">{d.dest}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      d.status === "Delivered"
-                        ? "bg-primary/10 text-primary"
-                        : d.status === "In Transit"
-                        ? "bg-blue-500/10 text-blue-400"
-                        : "bg-yellow-500/10 text-yellow-400"
-                    }`}>
-                      {d.status}
-                    </span>
-                    <p className="text-xs text-muted-foreground mt-1">{d.time}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-6">
+              <Shield className="w-8 h-8 text-red-400" />
             </div>
-          </motion.div>
-
-          {/* Alerts */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="glass rounded-2xl p-6"
-          >
-            <h2 className="font-display font-semibold text-foreground mb-4">System Alerts</h2>
-            <div className="space-y-4">
-              {[
-                { msg: "Route optimization complete for Zone B", type: "success" },
-                { msg: "High traffic alert: Delhi NCR region", type: "warning" },
-                { msg: "Fleet maintenance due: Vehicle SF-042", type: "info" },
-                { msg: "New pickup request from FreshBox", type: "success" },
-              ].map((a, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className={`w-2 h-2 mt-1.5 rounded-full flex-shrink-0 ${
-                    a.type === "success" ? "bg-primary" : a.type === "warning" ? "bg-yellow-400" : "bg-blue-400"
-                  }`} />
-                  <p className="text-sm text-muted-foreground">{a.msg}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 p-4 rounded-xl bg-secondary">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">Performance</span>
-              </div>
-              <p className="text-3xl font-display font-bold text-primary">98.4%</p>
-              <p className="text-xs text-muted-foreground">Fleet efficiency this week</p>
-            </div>
+            <h2 className="text-2xl font-display font-bold text-foreground mb-4">Admin Dashboard</h2>
+            <p className="text-muted-foreground mb-6">
+              Monitor system performance, manage fleet operations, view analytics, and control users.
+            </p>
+            <ul className="text-sm text-muted-foreground mb-8 space-y-2">
+              <li>• System overview & analytics</li>
+              <li>• Fleet management</li>
+              <li>• User administration</li>
+              <li>• Performance monitoring</li>
+            </ul>
+            <Button variant="heroOutline" size="lg" className="w-full" asChild>
+              <Link to="/admin-dashboard">
+                Access Admin Dashboard
+              </Link>
+            </Button>
           </motion.div>
         </div>
+
+        {/* Quick Access Dropdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-12"
+        >
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="lg">
+                Quick Access <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="min-w-[200px]">
+              <DropdownMenuItem asChild>
+                <Link to="/user-dashboard" className="cursor-pointer">
+                  <User className="w-4 h-4 mr-2" />
+                  User Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/admin-dashboard" className="cursor-pointer">
+                  <Shield className="w-4 h-4 mr-2" />
+                  Admin Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/get-started" className="cursor-pointer">
+                  <Package className="w-4 h-4 mr-2" />
+                  New Shipment
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </motion.div>
       </div>
     </section>
     <Footer />
   </div>
-);
+  );
+};
 
 export default Dashboard;
