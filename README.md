@@ -1,4 +1,4 @@
-# 🚚 SwiftFleet Courier Dashboard
+# 🚚 ShipFast Courier Dashboard
 
 A modern, responsive courier and delivery service website built with React, TypeScript, and Tailwind CSS. Features multiple pages, RTL/LTR support, and comprehensive dashboard functionality.
 
